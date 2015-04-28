@@ -1,34 +1,27 @@
-### Basic Yelp client
+## Yelp
 
-This is a headless example of how to implement an OAuth 1.0a Yelp API client. The Yelp API provides an application token that allows applications to make unauthenticated requests to their search API.
+This is a Yelp search app using the [Yelp API](http://developer.rottentomatoes.com/docs/read/JSON).
 
-### Next steps
+Time spent: 6 hours
 
-- Check out `BusinessesViewController.swift` to see how to use the `Business` model.
+### Features
 
-### Sample request
+#### Required
 
-**Basic search with query**
+- [ ] Search results page
+   - [ ] Table rows should be dynamic height according to the content height
+   - [ ] Custom cells should have the proper Auto Layout constraints
+   - [ ] Search bar should be in the navigation bar (doesn't have to expand to show location like the real Yelp app does).
+- [ ] Filter page. Unfortunately, not all the filters are supported in the Yelp API.
+   - [ ] The filters you should actually have are: category, sort (best match, distance, highest rated), radius (meters), deals (on/off).
+   - [ ] The filters table should be organized into sections as in the mock.
+   - [ ] You can use the default UISwitch for on/off states. Optional: implement a custom switch
+   - [ ] Clicking on the "Search" button should dismiss the filters page and trigger the search w/ the new filter settings.
+   - [ ] Display some of the available Yelp categories (choose any 3-4 that you want).
 
-```
-Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
-    self.businesses = businesses
-    
-    for business in businesses {
-        println(business.name!)
-        println(business.address!)
-    }
-})
-```
 
-**Advanced search with categories, sort, and deal filters**
+### Walkthrough
 
-```
-Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
+![Video Walkthrough](https://github.com/ybv/yelpo/blob/master/VWalk.gif)
 
-    for business in businesses {
-        println(business.name!)
-        println(business.address!)
-    }
-}
-```
+
