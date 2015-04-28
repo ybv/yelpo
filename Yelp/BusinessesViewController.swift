@@ -8,12 +8,13 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FilterViewControllerDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, FilterViewControllerDelegate {
 
     var businesses: [Business]!
     
-    
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,10 +22,14 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         self.tableView.delegate = self
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 120
-        
+        self.searchBar.delegate = self
+        self.searchBar.sizeToFit()
+        navigationItem.titleView = self.searchBar
+        navigationController?.navigationBar.backgroundColor = UIColor.yellowColor()
         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["pizza"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
-            
+           
+            //searchController.hidesNavigationBarDuringPresentation = false
             for business in businesses {
                 println(business.name!)
                 println(business.address!)
@@ -39,6 +44,14 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         // Dispose of any resources that can be recreated.
     }
     
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        self.businesses = self.businesses.filter ({$0.name!.lowercaseString.rangeOfString(searchText.lowercaseString) != nil})
+        for b in self.businesses{
+            print(b.name)
+        }
+        tableView.reloadData()
+
+    }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
         cell.business = self.businesses[indexPath.row]
@@ -47,7 +60,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.businesses != nil{
+        if self.businesses != nil {
             return self.businesses.count
         }
         else{
